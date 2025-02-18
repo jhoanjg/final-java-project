@@ -1,6 +1,7 @@
 package org.example.minesweeper;
 
 import static org.junit.Assert.*;
+
 import org.junit.Test;
 //Arrange
 //Act
@@ -137,5 +138,31 @@ public class MineFieldTest {
         assertEquals(CellValue.Seven, n.mineCount(5, 5));
         n.cells[6][6].value = CellValue.Mine;
         assertEquals(CellValue.Eight, n.mineCount(5, 5));
+    }
+
+
+    @Test
+    public void expanding_a_cell_containing_a_number_expands_only_that_t_cell() {
+        MineField n = new MineField();
+        n.clearCells();
+
+        n.cells[3][5].value = CellValue.One;
+        n.expand(3, 5);
+
+        for (int x = 0; x < n.cells.length; x++)
+            for (int y = 0; y < n.cells[x].length; y++)
+                if (x != 3 && y != 5)
+                    assertTrue(n.cells[x][y].isHidden);
+
+        assertFalse(n.cells[3][5].isHidden);
+
+    }
+
+    @Test
+    public void expanding_a_mine_shows_all_mines() {
+    }
+
+    @Test
+    public void expanding_an_empty_cell_recursively_shows_adjacent_empty_t_cells_including_the_numbers_around_them() {
     }
 }

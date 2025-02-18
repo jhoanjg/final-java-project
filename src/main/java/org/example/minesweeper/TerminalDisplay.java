@@ -45,6 +45,14 @@ public class TerminalDisplay {
         }
     }
 
+    public void flush(){
+        try {
+            t.flush();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public void drawDiagonal(int size, char c) throws IOException {
         for (int i = 0; i < size; i++) {
             putCharacter(i, i, c);
