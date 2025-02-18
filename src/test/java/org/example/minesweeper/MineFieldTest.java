@@ -208,4 +208,38 @@ public class MineFieldTest {
                     assertTrue(n.cells[x][y].isHidden);
 
     }
+
+    @Test
+    public void areAllMinesFlagged_returns_true_when_all_mines_have_a_flag() {
+        MineField n = new MineField();
+        n.clearCells();
+        n.cells[2][0].value = CellValue.Mine;
+        n.cells[0][2].value = CellValue.Mine;
+        n.cells[0][4].value = CellValue.Mine;
+        n.cells[2][0].isFlagged = true;
+        n.cells[0][2].isFlagged = true;
+        n.cells[0][4].isFlagged = true;
+
+        boolean actual = n.areAllMinesFlagged();
+
+        assertTrue(actual);
+
+    }
+
+    @Test
+    public void areAllMinesFlagged_return_false_when_mines_are_insufficiently_flagged() {
+        MineField n = new MineField();
+        n.clearCells();
+        n.cells[2][0].value = CellValue.Mine;
+        n.cells[0][2].value = CellValue.Mine;
+        n.cells[0][4].value = CellValue.Mine;
+        n.cells[2][0].isFlagged = true;
+        n.cells[0][2].isFlagged = true;
+
+        boolean actual = n.areAllMinesFlagged();
+
+        assertFalse(actual);
+
+
+    }
 }
