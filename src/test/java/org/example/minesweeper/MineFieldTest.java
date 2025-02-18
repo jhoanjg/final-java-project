@@ -160,9 +160,52 @@ public class MineFieldTest {
 
     @Test
     public void expanding_a_mine_shows_all_mines() {
+        MineField n = new MineField();
+        n.clearCells();
+
+        n.cells[1][5].value = CellValue.Mine;
+        n.cells[4][5].value = CellValue.Mine;
+        n.cells[8][5].value = CellValue.Mine;
+        n.expand(4, 5);
+
+        assertFalse(n.cells[1][5].isHidden);
+        assertFalse(n.cells[4][5].isHidden);
+        assertFalse(n.cells[8][5].isHidden);
+
     }
 
+    /**
+     * Assume the grid looks like this:
+     * <p>
+     * -----------
+     * |  *
+     * |12121
+     * |*1 1*
+     * |22 22
+     * |*1 1*
+     * |12121
+     * |  *
+     */
     @Test
-    public void expanding_an_empty_cell_recursively_shows_adjacent_empty_t_cells_including_the_numbers_around_them() {
+    public void expanding_an_empty_cell_recursively_shows_adjacent_empty_cells_including_the_numbers_around_them() {
+        MineField n = new MineField();
+        n.clearCells();
+        n.cells[2][0].value = CellValue.Mine;
+        n.cells[0][2].value = CellValue.Mine;
+        n.cells[0][4].value = CellValue.Mine;
+        n.cells[4][2].value = CellValue.Mine;
+        n.cells[4][4].value = CellValue.Mine;
+        n.cells[2][6].value = CellValue.Mine;
+        n.calculateNumbers();
+
+        n.expand(2, 4);
+
+        for (int x = 0; x < n.cells.length; x++)
+            for (int y = 0; y < n.cells[x].length; y++)
+                if (x > 0 && x < 4 && y > 0 && y < 6)
+                    assertFalse(n.cells[x][y].isHidden);
+                else
+                    assertTrue(n.cells[x][y].isHidden);
+
     }
 }

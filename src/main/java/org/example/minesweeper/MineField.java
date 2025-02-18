@@ -69,7 +69,16 @@ public class MineField {
 
     }
 
-    public void expand(int i, int i1) {
+    public void expand(int x, int y) {
+        cells[x][y].isHidden = false;
+        if (cells[x][y].value == CellValue.Mine)
+            showAllMines();
+    }
 
+    private void showAllMines() {
+        for (int x = 0; x < cells.length; x++)
+            for (int y = 0; y < cells[x].length; y++)
+                if (cells[x][y].value == CellValue.Mine)
+                    cells[x][y].isHidden = false;
     }
 }
