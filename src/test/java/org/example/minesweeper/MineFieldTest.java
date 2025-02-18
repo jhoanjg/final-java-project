@@ -1,7 +1,6 @@
 package org.example.minesweeper;
 
 import static org.junit.Assert.*;
-
 import org.junit.Test;
 //Arrange
 //Act
@@ -26,7 +25,7 @@ public class MineFieldTest {
 
         for (int x = 0; x < n.cells.length; x++) {
             for (int y = 0; y < n.cells[x].length; y++) {
-                assertTrue(n.cells[x][y].isHidden);
+                assertTrue(n.cells[x][y].hidden);
             }
         }
     }
@@ -38,7 +37,7 @@ public class MineFieldTest {
 
         for (int x = 0; x < n.cells.length; x++) {
             for (int y = 0; y < n.cells[x].length; y++) {
-                assertFalse(n.cells[x][y].isFlagged);
+                assertFalse(n.isFlagged(x, y));
             }
         }
     }
@@ -152,9 +151,9 @@ public class MineFieldTest {
         for (int x = 0; x < n.cells.length; x++)
             for (int y = 0; y < n.cells[x].length; y++)
                 if (x != 3 && y != 5)
-                    assertTrue(n.cells[x][y].isHidden);
+                    assertTrue(n.cells[x][y].hidden);
 
-        assertFalse(n.cells[3][5].isHidden);
+        assertFalse(n.cells[3][5].hidden);
 
     }
 
@@ -168,9 +167,9 @@ public class MineFieldTest {
         n.cells[8][5].value = CellValue.Mine;
         n.expand(4, 5);
 
-        assertFalse(n.cells[1][5].isHidden);
-        assertFalse(n.cells[4][5].isHidden);
-        assertFalse(n.cells[8][5].isHidden);
+        assertFalse(n.cells[1][5].hidden);
+        assertFalse(n.cells[4][5].hidden);
+        assertFalse(n.cells[8][5].hidden);
 
     }
 
@@ -203,27 +202,61 @@ public class MineFieldTest {
         for (int x = 0; x < n.cells.length; x++)
             for (int y = 0; y < n.cells[x].length; y++)
                 if (x > 0 && x < 4 && y > 0 && y < 6)
-                    assertFalse(n.cells[x][y].isHidden);
+                    assertFalse(n.cells[x][y].hidden);
                 else
-                    assertTrue(n.cells[x][y].isHidden);
+                    assertTrue(n.cells[x][y].hidden);
 
     }
 
     @Test
-    public void areAllMinesFlagged_returns_true_when_all_mines_have_a_flag() {
+    public void toggleFlag_puts_a_flag_on_a_cell() {
         MineField n = new MineField();
+        n.clearCells();
+
+        n.toggleFlag(2, 2);
+
+        assertTrue(n.isFlagged(2, 2));
+    }
+
+    @Test
+    public void toggleFlag_prevents_more_flags_than_mines() {
+        MineField n = new MineField(3);
+
+        n.toggleFlag(1, 2);
+        assertTrue(n.isFlagged(1, 2));
+        n.toggleFlag(2, 2);
+        assertTrue(n.isFlagged(2, 2));
+        n.toggleFlag(3, 2);
+        assertTrue(n.isFlagged(3, 2));
+        n.toggleFlag(4, 2);
+        assertFalse(n.isFlagged(4, 2));
+    }
+
+    @Test
+    public void toggleFlag_removes_a_flag_if_it_was_there() {
+        MineField n = new MineField();
+        n.clearCells();
+
+        n.toggleFlag(2, 2);
+        n.toggleFlag(2, 2);
+
+        assertFalse(n.isFlagged(2, 2));
+    }
+
+    @Test
+    public void areAllMinesFlagged_returns_true_when_all_mines_have_a_flag() {
+        MineField n = new MineField(3);
         n.clearCells();
         n.cells[2][0].value = CellValue.Mine;
         n.cells[0][2].value = CellValue.Mine;
         n.cells[0][4].value = CellValue.Mine;
-        n.cells[2][0].isFlagged = true;
-        n.cells[0][2].isFlagged = true;
-        n.cells[0][4].isFlagged = true;
+        n.toggleFlag(2, 0);
+        n.toggleFlag(0, 2);
+        n.toggleFlag(0, 4);
 
         boolean actual = n.areAllMinesFlagged();
 
         assertTrue(actual);
-
     }
 
     @Test
@@ -233,13 +266,13 @@ public class MineFieldTest {
         n.cells[2][0].value = CellValue.Mine;
         n.cells[0][2].value = CellValue.Mine;
         n.cells[0][4].value = CellValue.Mine;
-        n.cells[2][0].isFlagged = true;
-        n.cells[0][2].isFlagged = true;
+        n.toggleFlag(2, 0);
+        n.toggleFlag(0, 2);
+        // Flag is in the WRONG spot
+        n.toggleFlag(6, 2);
 
         boolean actual = n.areAllMinesFlagged();
 
         assertFalse(actual);
-
-
     }
 }
