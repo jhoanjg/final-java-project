@@ -86,6 +86,7 @@ public class MineField {
                     t.putCharacter(x, y, '~');
                 else
                     t.putCharacter(x, y, cells[x][y].value.glyph.charAt(0));
+        t.flush();
     }
 
     public void expand(int x, int y) {
@@ -120,6 +121,11 @@ public class MineField {
     }
 
     boolean isPlayerDead() {
+        for (Cell[] cell : cells)
+            for (Cell value : cell) {
+                if (value.value == CellValue.Mine && !value.hidden)
+                    return true;
+            }
         return false;
     }
 }

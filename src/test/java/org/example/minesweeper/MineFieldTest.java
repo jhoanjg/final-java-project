@@ -1,6 +1,7 @@
 package org.example.minesweeper;
 
 import static org.junit.Assert.*;
+
 import org.junit.Test;
 //Arrange
 //Act
@@ -261,7 +262,7 @@ public class MineFieldTest {
 
     @Test
     public void areAllMinesFlagged_return_false_when_mines_are_insufficiently_flagged() {
-        MineField n = new MineField();
+        MineField n = new MineField(3);
         n.clearCells();
         n.cells[2][0].value = CellValue.Mine;
         n.cells[0][2].value = CellValue.Mine;
@@ -269,10 +270,37 @@ public class MineFieldTest {
         n.toggleFlag(2, 0);
         n.toggleFlag(0, 2);
         // Flag is in the WRONG spot
-        n.toggleFlag(6, 2);
+        n.toggleFlag(6, 0);
 
         boolean actual = n.areAllMinesFlagged();
 
         assertFalse(actual);
+    }
+
+    @Test
+    public void isPlayerDead_return_true_when_expanding_a_mine() {
+        MineField n = new MineField(1);
+        n.clearCells();
+        n.cells[2][0].value = CellValue.Mine;
+        n.cells[2][0].hidden = false;
+
+        boolean result = n.isPlayerDead();
+
+        assertTrue(result);
+
+    }
+
+    @Test
+    public void isPlayerDead_return_false_when_no_mines_are_exposed() {
+        MineField n = new MineField(2);
+        n.clearCells();
+        n.cells[2][0].value = CellValue.Mine;
+        n.cells[0][4].value = CellValue.Mine;
+        n.cells[2][0].hidden = true;
+        n.cells[0][4].hidden = true;
+
+        boolean result = n.isPlayerDead();
+
+        assertFalse(result);
     }
 }
