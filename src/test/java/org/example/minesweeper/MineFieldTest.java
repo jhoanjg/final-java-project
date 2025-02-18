@@ -26,8 +26,36 @@ public class MineFieldTest {
 
         for (int x = 0; x < n.cells.length; x++) {
             for (int y = 0; y < n.cells[x].length; y++) {
-                assertTrue(n.cells[0][0].isHidden);
+                assertTrue(n.cells[x][y].isHidden);
             }
         }
+    }
+
+    @Test
+    public void cells_are_not_flagged() {
+        MineField n;
+        n = new MineField();
+
+        for (int x = 0; x < n.cells.length; x++) {
+            for (int y = 0; y < n.cells[x].length; y++) {
+                assertFalse(n.cells[x][y].isFlagged);
+            }
+        }
+    }
+
+    @Test
+    public void there_are_10_mines() {
+        MineField n;
+        int numberOfMines = 0;
+
+        n = new MineField();
+
+        for (int x = 0; x < n.cells.length; x++) {
+            for (int y = 0; y < n.cells[x].length; y++) {
+                if (n.cells[x][y].value == CellValue.Mine)
+                    numberOfMines++;
+            }
+        }
+        assertEquals(10, numberOfMines);
     }
 }

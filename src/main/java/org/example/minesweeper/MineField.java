@@ -18,14 +18,35 @@ public class MineField {
             }
         }
         placeMines(10);
+        calculateNumbers();
+    }
+
+
+    private void calculateNumbers() {
+        for (int x = 0; x < cells.length; x++) {
+            for (int y = 0; y < cells[x].length; y++) {
+                if(cells[x][y].value != CellValue.Mine){
+                    cells[x][y].value = mineCount(x,y);
+                }
+            }
+        }
+
+    }
+
+    private CellValue mineCount(int x, int y) {
+
+        return null;
     }
 
     private void placeMines(int i) {
         Random r = new Random();
-        for (int z = 0; z < i; z++) {
+        for (int z = 0; z < i; ) {
             int x = Math.abs(r.nextInt()) % 10;
             int y = Math.abs(r.nextInt()) % 10;
-            cells[x][y].value = CellValue.Mine;
+            if (cells[x][y].value == CellValue.Empty) {
+                cells[x][y].value = CellValue.Mine;
+                z++;
+            }
         }
     }
 
