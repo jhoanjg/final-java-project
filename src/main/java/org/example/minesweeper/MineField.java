@@ -1,5 +1,5 @@
 package org.example.minesweeper;
 
-public class Main {
+public class MineField {
 
 }
