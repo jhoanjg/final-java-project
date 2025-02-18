@@ -7,38 +7,39 @@ public class MineField {
 
     public MineField() {
         this.cells = new Cell[10][10];
-        initializeCell();
-
+        initializeCells();
     }
 
-    private void initializeCell() {
+    void initializeCells() {
+        clearCells();
+        placeMines(10);
+        calculateNumbers();
+    }
+
+    void clearCells() {
         for (int x = 0; x < cells.length; x++) {
             for (int y = 0; y < cells[x].length; y++) {
                 cells[x][y] = new Cell(CellValue.Empty);
             }
         }
-        placeMines(10);
-        calculateNumbers();
     }
 
-
-    private void calculateNumbers() {
+    void calculateNumbers() {
         for (int x = 0; x < cells.length; x++) {
             for (int y = 0; y < cells[x].length; y++) {
-                if(cells[x][y].value != CellValue.Mine){
-                    cells[x][y].value = mineCount(x,y);
+                if (cells[x][y].value != CellValue.Mine) {
+                    cells[x][y].value = mineCount(x, y);
                 }
             }
         }
-
     }
 
-    private CellValue mineCount(int x, int y) {
+    CellValue mineCount(int x, int y) {
 
-        return null;
+        return CellValue.Empty;
     }
 
-    private void placeMines(int i) {
+    void placeMines(int i) {
         Random r = new Random();
         for (int z = 0; z < i; ) {
             int x = Math.abs(r.nextInt()) % 10;
