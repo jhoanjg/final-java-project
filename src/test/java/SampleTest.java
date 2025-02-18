@@ -5,5 +5,7 @@ public class SampleTest {
     @Test
     public void sample_test() {
         assertTrue(true);
+
     }
 }
+
