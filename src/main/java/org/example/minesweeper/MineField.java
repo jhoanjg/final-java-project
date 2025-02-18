@@ -70,9 +70,16 @@ public class MineField {
     }
 
     public void expand(int x, int y) {
+        if (!cells[x][y].isHidden)
+            return;
+
         cells[x][y].isHidden = false;
         if (cells[x][y].value == CellValue.Mine)
             showAllMines();
+        if (cells[x][y].value == CellValue.Empty)
+            for (int coll = Math.max(0, x - 1); coll <= Math.min(9, x + 1); coll++)
+                for (int row = Math.max(0, y - 1); row <= Math.min(9, y + 1); row++)
+                    expand(coll, row);
     }
 
     private void showAllMines() {
@@ -80,5 +87,13 @@ public class MineField {
             for (int y = 0; y < cells[x].length; y++)
                 if (cells[x][y].value == CellValue.Mine)
                     cells[x][y].isHidden = false;
+    }
+
+    boolean areAllMinesFlagged() {
+        return false;
+    }
+
+    boolean isPlayerDead() {
+        return false;
     }
 }
